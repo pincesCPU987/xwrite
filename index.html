@@ -1,0 +1,110 @@
+<title>XWrite | Create Documents for Free</title>
+<body style="background-color:lightgrey;">
+  <p>XWrite Document Creator</p>
+  Filename:<input type="text" id="name">
+  <br>
+  <input type="file" id="inputfile" accept=".xwa">
+  <div>
+    <input type="button" value="B" style="font-weight:900;" onclick="txt.focus();keyboardShortcut(66,'b',{shiftKey:false,ctrlKey:true,altKey:false});">
+    <input type="button" value="I" style="font-style:italic;">
+    <input type="button" value="U" style="text-decoration:underline;">
+  </div>
+  <br>
+  <div style="height:11in;width:8.5in;padding:10px;background-color:white;" id="txt" contenteditable>
+    
+  </div>
+  <script>
+          document.getElementById('inputfile').addEventListener('change', function() {
+
+            var fr = new FileReader();
+            fr.onload = function() {
+                document.getElementById('txt').innerHTML = fr.result;
+              }
+            if(this.files[0].name.split('.')[this.files[0].name.split('.').length - 1] == 'xwa'){
+              fr.readAsText(this.files[0]);
+            } else {
+              alert('Incorrect file type. Please upload a different file.');
+            }
+                      });
+    var txt = document.querySelector('#txt');
+    txt.addEventListener('keydown',function(e){
+      //console.log(e.keyCode);
+      if(e.ctrlKey){
+        if(e.keyCode == 66){
+          //Bold
+          /*e.preventDefault();
+          //addStyle('b');
+          surroundSelection(e.target,'b');*/
+        }
+        if(e.keyCode == 73){
+          //Italic
+          //e.preventDefault();
+          //addStyle('i');
+        }
+        if(e.keyCode == 85){
+          //Underline
+          //addStyle('u');
+        }
+      }
+    },true);
+    document.body.addEventListener('keydown',function(e){
+      if(e.ctrlKey && e.keyCode == 83){
+        e.preventDefault();
+        var a = document.createElement('a');
+        a.href = 'data:text/plain;base64,' + btoa(txt.innerHTML);
+        a.download = makeName();
+        a.innerHTML = 'Ignore';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+      if(e.ctrlKey && e.keyCode == 80){
+        e.preventDefault();
+        makePage();
+      }
+    },true);
+    function makeName(){
+      var name = document.querySelector('#name');
+      if(!name.value.trim()){
+        return 'save.xwa';
+      } else {
+        return name.value.trim() + '.xwa';
+      }
+    }
+    function makePage(){
+      var mywindow = window.open('', 'PRINT', 'height=450,width=800');
+
+      mywindow.document.write('<title>Printed XWrite</title>' + txt.innerHTML);
+
+      mywindow.print();
+      mywindow.close();
+
+      return true;
+    }
+    function keyboardShortcut(code,letter,modifiers){
+      document.querySelector('#txt').focus();document.querySelector('#txt').dispatchEvent(new KeyboardEvent("keydown", {
+        key:letter,
+    keyCode: code, // example values.
+    code: "KeyE", // put everything you need in this object.
+    which: code,
+    shiftKey: modifiers['shiftKey'],
+    ctrlKey: modifiers['ctrlKey'],
+    altKey: modifiers['altKey']
+}));
+    }
+    /*function surroundSelection(element,type) {
+    if (window.getSelection) {
+        var sel = window.getSelection();
+      var range = sel.getRangeAt(0).cloneRange();
+        if (range.commonAncestorContainer.parentNode != type){
+            console.log('Text has not been ' + type.toUpperCase() + '\'d. ' + type.toUpperCase() + '\'ing text now.');
+            range.surroundContents(document.createElement(type));
+            sel.removeAllRanges();
+            sel.addRange(range);
+        } else {
+          range.commonAncestorContainer.parentNode.remove();
+        }
+    }
+}*/
+</script>
+</body>
