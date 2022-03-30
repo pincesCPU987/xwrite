@@ -51,7 +51,7 @@
       if(e.ctrlKey && e.keyCode == 83){
         e.preventDefault();
         var a = document.createElement('a');
-        a.href = 'data:text/plain;base64,' + btoa(txt.innerHTML);
+        a.href = 'data:text/html;meta-charset,' + encodeURIComponent(txt.innerHTML);
         a.download = makeName();
         a.innerHTML = 'Ignore';
         document.body.appendChild(a);
