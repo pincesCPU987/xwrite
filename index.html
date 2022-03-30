@@ -13,6 +13,7 @@
   <div style="height:11in;width:8.5in;padding:10px;background-color:white;" id="txt" contenteditable>
     
   </div>
+  <textarea id="source" style="height:11in;width:8.5in;padding:10px;background-color:white;"></textarea>
   <script>
           document.getElementById('inputfile').addEventListener('change', function() {
 
@@ -106,5 +107,11 @@
         }
     }
 }*/
+    document.querySelector('#txt').addEventListener('input',function(event){
+      document.querySelector('#source').value = event.target.innerHTML;
+    },true);
+    document.querySelector('#source').addEventListener('input',function(event){
+      document.querySelector('#txt').innerHTML = event.target.value;
+    },true);
 </script>
 </body>
